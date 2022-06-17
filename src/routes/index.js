@@ -6,8 +6,8 @@ router.get("/", (req, res) => {
   res.render("index", { title: "Home", message: "Hello there!" });
 });
 
-router.get("/about", (req, res) => {
-  res.render("about", { title: "About me!", message: "Bio!" });
+router.get("/users", (req, res) => {
+  res.render("users", { title: "Users", message: "Users" });
 });
 
 export default router;

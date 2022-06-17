@@ -1,8 +1,9 @@
 import express from "express";
-import router from "./routes/index.js";
 import Prisma from "@prisma/client";
-const { PrismaClient } = Prisma;
 
+import router from "./routes/index.js";
+
+const { PrismaClient } = Prisma;
 const PORT = 5000;
 const app = express();
 const prisma = new PrismaClient();
@@ -25,6 +26,30 @@ app.post("/api/users", async (req, res) => {
       username,
       password,
     },
+  });
+  res.json(user);
+});
+
+app.put("/api/users/:username", async (req, res) => {
+  const { username } = req.params;
+  const { avatar, email, password } = req.body;
+
+  const user = await prisma.user.update({
+    where: { username },
+    data: {
+      avatar,
+      email,
+      password,
+    },
+  });
+  res.json(user);
+});
+
+app.delete("/api/users/:username", async (req, res) => {
+  const { username } = req.params;
+
+  const user = await prisma.user.delete({
+    where: { username },
   });
   res.json(user);
 });
@@ -76,6 +101,34 @@ app.post("/api/nfts", async (req, res) => {
       price,
       owner: { connect: { username: ownerId } },
     },
+  });
+
+  res.json(nft);
+});
+
+app.put("/api/nfts/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, description, imageUrl, price, ownerId } = req.body;
+
+  const nft = await prisma.nft.update({
+    where: { id },
+    data: {
+      name,
+      description,
+      imageUrl,
+      price,
+      owner: { connect: { username: ownerId } },
+    },
+  });
+
+  res.json(nft);
+});
+
+app.delete("/api/nfts/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const nft = await prisma.nft.delete({
+    where: { id },
   });
 
   res.json(nft);
