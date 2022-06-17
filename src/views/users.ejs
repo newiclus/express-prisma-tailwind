@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+  <meta charset="UTF-8" />
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title  %></title>
-    <link rel="stylesheet" href="/styles/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/styles.css" />
   </head>
   <body>
     <main class="relative bg-white overflow-hidden">
@@ -12,12 +12,70 @@
         <%- include('blocs/navigation') %>
 
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1><%= message  %></h1>
+          <h1 class="title">Users</h1>
+
+          <section class="content-table">
+            <table class="users-table">
+              <thead
+                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              >
+                <tr>
+                  <th scope="col" class="px-6 py-3">ID</th>
+                  <th scope="col" class="px-6 py-3">Username</th>
+                  <th scope="col" class="px-6 py-3">Email</th>
+                  <th scope="col" class="px-6 py-3">Avatar</th>
+                  <th scope="col" class="px-6 py-3">Created at</th>
+                  <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="users"></tbody>
+            </table>
+          </section>
         </div>
 
         <%- include('blocs/footer') %>
       </div>
     </main>
-    
+
+    <script>
+      async function load() {
+        const response = await fetch("/api/users");
+        const users = await response.json();
+
+        const usersTable = document.querySelector("#users");
+        users.forEach((user) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-700">
+              ${user.id}
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-700">
+              ${user.username}
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-700">
+              <a href="mailto:${
+                user.email
+              }" class="text-blue-500 hover:text-blue-700">
+                ${user.email}
+              </a>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-700">
+              <img src="${user.avatar}" alt="${user.username}" width="80" />
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-700">
+              ${new Date(user.createdAt).toLocaleString()}
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-700">
+              <a href="/users/${user.id}">Edit</a>
+            </td>
+          `;
+          usersTable.appendChild(row);
+        });
+      }
+
+      load();
+    </script>
   </body>
 </html>

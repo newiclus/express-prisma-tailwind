@@ -1,5 +1,6 @@
 import express from "express";
 import Prisma from "@prisma/client";
+import cors from "cors";
 
 import router from "./routes/index.js";
 
@@ -11,6 +12,7 @@ const prisma = new PrismaClient();
 app.set("views", "./src/views");
 app.set("view engine", "ejs");
 
+app.use(cors());
 app.use(express.static("./public"));
 app.use(router);
 
@@ -42,7 +44,7 @@ app.put("/api/users/:username", async (req, res) => {
       password,
     },
   });
-  res.json(user);
+  res.status(200).json(user);
 });
 
 app.delete("/api/users/:username", async (req, res) => {
@@ -66,6 +68,7 @@ app.get("/api/users", async (req, res) => {
     },
   });
 
+  res.status(200);
   res.json(users);
 });
 

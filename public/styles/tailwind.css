@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.title {
+  @apply font-semibold text-2xl py-6;
+}
+
+.content-table {
+  @apply relative overflow-x-auto shadow-md sm:rounded-lg;
+}
+
+.users-table {
+  @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+}
